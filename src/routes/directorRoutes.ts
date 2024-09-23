@@ -8,6 +8,7 @@ import {
 
 const router = Router();
 
+
 router.post('/directors', createDirector); 
 router.get('/directors', getDirectors);    
 router.put('/directors/:id', updateDirector); 
