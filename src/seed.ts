@@ -16,7 +16,7 @@ const createDatabase = async (dbName: string) => {
   });
 
   try {
-    await client.query(`CREATE DATABASE ${dbName};`);
+    await client.query(`CREATE DATABASE "${dbName}";`);
     console.log(`Database ${dbName} created successfully!`);
   } catch (error) {
     const dbError = error as DatabaseError; 
@@ -31,10 +31,13 @@ const createDatabase = async (dbName: string) => {
 };
 
 const seedData = async () => {
-  const dbName = 'MOVIE_DB';
+  const dbName = 'movies_db'; // Use the new database name
   
   // Create the database
   await createDatabase(dbName);
+
+  // Delay to ensure the database is fully recognized
+  await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
 
   // Create a new pool to connect to the new database
   const pool = new Pool({
@@ -46,11 +49,15 @@ const seedData = async () => {
   });
 
   try {
-    // Create Tables
+    // Test the connection to the database
+    await pool.connect();
+    console.log(`Connected to database ${dbName}`);
+
+    // Create Tables with Unique Constraints
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Directors (
         DirectorID SERIAL PRIMARY KEY,
-        Name VARCHAR(100),
+        Name VARCHAR(100) UNIQUE,
         Nationality VARCHAR(100),
         DOB DATE
       );
@@ -59,7 +66,7 @@ const seedData = async () => {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Actors (
         ActorID SERIAL PRIMARY KEY,
-        Name VARCHAR(100),
+        Name VARCHAR(100) UNIQUE,
         Nationality VARCHAR(100),
         DOB DATE
       );
@@ -68,26 +75,27 @@ const seedData = async () => {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Genres (
         GenreID SERIAL PRIMARY KEY,
-        GenreName VARCHAR(100)
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS Ratings (
-        MovieID INT REFERENCES Movies(MovieID),
-        Rating DECIMAL(2, 1),
-        PRIMARY KEY (MovieID)
+        GenreName VARCHAR(100) UNIQUE
       );
     `);
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Movies (
         MovieID SERIAL PRIMARY KEY,
-        Title VARCHAR(200),
+        Title VARCHAR(200) UNIQUE,
         ReleaseYear INT,
         DirectorID INT REFERENCES Directors(DirectorID)
       );
     `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS Ratings (
+        MovieID INT PRIMARY KEY REFERENCES Movies(MovieID),
+        Rating DECIMAL(2, 1)
+      );
+    `);
+
+    console.log('Tables created successfully!');
 
     // Insert Directors
     await pool.query(`
