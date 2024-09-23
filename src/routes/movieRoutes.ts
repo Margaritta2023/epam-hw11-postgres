@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.post('/', createMovie);
-router.get('/', getMovies);
-router.put('/:id', updateMovie);    
-router.delete('/:id', deleteMovie); 
+router.post('/movies', createMovie);
+router.get('/movies', getMovies);
+router.put('/movies/:id', updateMovie);    
+router.delete('/movies/:id', deleteMovie); 
 
 export default router;
