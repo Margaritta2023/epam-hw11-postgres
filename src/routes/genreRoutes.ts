@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.post('/', createGenre);
-router.get('/', getGenres);
-router.put('/:id', updateGenre);
-router.delete('/:id', deleteGenre);
+router.post('/genres', createGenre);
+router.get('/genres', getGenres);
+router.put('/genres/:id', updateGenre);
+router.delete('/genres/:id', deleteGenre);
 
 export default router;
