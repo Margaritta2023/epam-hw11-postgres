@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.post('/', createDirector); 
-router.get('/', getDirectors);    
-router.put('/:id', updateDirector); 
-router.delete('/:id', deleteDirector); 
+router.post('/directors', createDirector); 
+router.get('/directors', getDirectors);    
+router.put('/directors/:id', updateDirector); 
+router.delete('/directors/:id', deleteDirector); 
 
 export default router;
