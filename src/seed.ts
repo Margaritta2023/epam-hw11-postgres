@@ -2,7 +2,6 @@ import { Pool } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 interface DatabaseError extends Error {
   code?: string; 
 }
@@ -32,7 +31,6 @@ const createDatabase = async (dbName: string) => {
 
 const seedData = async () => {
   const dbName = 'movies_db'; // Use the new database name
-  
   // Create the database
   await createDatabase(dbName);
 
